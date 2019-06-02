@@ -55,6 +55,16 @@ attr_accessor :title, :price
     return Customer.map_items(customers)
   end
 
+  def customers_count
+    sql = "SELECT customers.* FROM customers
+          INNER JOIN tickets ON tickets.customer_id = customers.id
+          WHERE film_id = $1"
+    values = [@id]
+    customers = SqlRunner.run(sql, values)
+    customer_array = Customer.map_items(customers)
+    return customer_array.reduce(0){ |count, object| count +1 }
+  end
+
   def self.all
     sql = "SELECT * FROM films"
     films = SqlRunner.run(sql)

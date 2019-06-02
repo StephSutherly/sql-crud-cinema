@@ -1,5 +1,6 @@
 require_relative ("../db/sql_runner")
 require_relative ("film")
+require_relative ("ticket")
 
 class Customer
 
@@ -51,6 +52,29 @@ attr_accessor :name, :funds
     values = [@id]
     films = SqlRunner.run(sql, values)
     return Film.map_items(films)
+  end
+
+  def tickets
+    sql = "SELECT * FROM tickets
+          WHERE customer_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    return Ticket.map_items(tickets)
+  end
+
+##Tickets count per customer in integer
+  def tickets_count
+    sql = "SELECT * FROM tickets
+          WHERE customer_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    ticket_array = Ticket.map_items(tickets)
+    return ticket_array.reduce(0){ |count, object| count + 1 }
+  end
+
+  def buy_ticket(film)
+    @funds -= film.price
+    return @funds
   end
 
   def self.all
