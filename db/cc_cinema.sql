@@ -1,3 +1,4 @@
+DROP TABLE screenings;
 DROP TABLE tickets;
 DROP TABLE customers;
 DROP TABLE films;
@@ -21,3 +22,14 @@ customers(id) ON DELETE CASCADE,
 film_id INT8 REFERENCES
 films(id) ON DELETE CASCADE
 );
+
+CREATE TABLE screenings (
+id SERIAL8 PRIMARY KEY,
+film_id INT8 REFERENCES
+films(id) ON DELETE CASCADE,
+show_time VARCHAR(255)
+);
+
+-- Create a screenings table that lets us know what time films are showing
+-- Write a method that finds out what is the most popular time (most tickets sold) for a given film
+-- Limit the available tickets for screenings.
